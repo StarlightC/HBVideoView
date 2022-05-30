@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_alpha8">#14FFFFFF</color>
+    <color name="white_alpha10">#1DFFFFFF</color>
+    <color name="white_alpha12">#1FFFFFFF</color>
+    <color name="white_alpha14">#24FFFFFF</color>
+    <color name="white_alpha20">#33FFFFFF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="black_alpha40">#66000000</color>
+    <color name="black_alpha70">#B3000000</color>
+    <color name="black_alpha80">#CC000000</color>
+
+    <color name="testColor">#88888888</color>
+    <color name="background_black">#FF060606</color>
+
+    <color name="text_color_2">#C8CDD2</color>
+    <color name="text_color_s_1">#FF8C9196</color>
+    <color name="text_color_p_2">#FF64696E</color>
+
+    <color name="red">#FFFF0000</color>
+
+    <color name="green">#FF00FF00</color>
+    <color name="blue">#FF0000FF</color>
+
+    <color name="battery_charging">#FF32B846</color>
+    <color name="battery_low">#FFF69D35</color>
+    <color name="battery_warning">#FFFA3C4B</color>
+</resources>

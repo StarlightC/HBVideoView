@@ -28,6 +28,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    viewBinding.isEnabled = true
 }
 
 dependencies {
@@ -40,4 +41,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     implementation(project(":hbvideoview"))
+    implementation(project(":ijkplayer"))
+    implementation(project(":exoplayer"))
 }

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="SpUsage">
+
+    <RelativeLayout
+        android:id="@+id/vg_user_interface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/vg_bottom_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/background_controller"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/vg_bottom_panel_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/bottom_blank"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp" />
+
+                <LinearLayout
+                    android:id="@+id/vg_controller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/vg_play_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="0dp"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_play"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_current_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:text="@string/time_count_default"
+                        android:textColor="@color/white"
+                        android:textSize="10dp" />
+
+                    <SeekBar
+                        android:id="@+id/seek_bar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:maxHeight="2dp"
+                        android:progressDrawable="@drawable/seekbar_track"
+                        android:thumb="@drawable/seekbar_thumb" />
+
+                    <TextView
+                        android:id="@+id/tv_whole_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/time_count_default"
+                        android:textColor="@color/white"
+                        android:textSize="10dp" />
+
+                    <ImageView
+                        android:id="@+id/vg_expand"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:padding="10dp"
+                        android:src="@drawable/icon_expand"
+                        app:tint="@color/white" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vg_land_bottom_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="25dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vg_top_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_header"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/vg_top_panel_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/vg_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_isp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="12dp"
+                        app:tint="@color/white" />
+
+                    <LinearLayout
+                        android:id="@+id/vg_clock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_clock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="11dp" />
+
+                        <TextClock
+                            android:id="@+id/tc_clock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:format24Hour="@string/time_format"
+                            android:textColor="@color/white"
+                            android:textSize="11dp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/vg_battery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_battery_remain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="11dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/vg_battery_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="11dp"
+                            android:layout_gravity="center_vertical">
+
+                            <View
+                                android:id="@+id/v_battery_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginVertical="2dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="4dp" />
+
+                            <ImageView
+                                android:id="@+id/iv_charging"
+                                android:layout_width="9dp"
+                                android:layout_height="9dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="6.5dp"
+                                android:src="@drawable/icon_charging"
+                                android:visibility="gone"
+                                app:tint="@color/white" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/vg_top_controller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_back"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
+                        android:src="@drawable/icon_back"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="start"
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_lock_screen"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:padding="4dp"
+            android:src="@color/white"
+            android:visibility="gone"
+            app:tint="@color/white" />
+
+
+        <LinearLayout
+            android:id="@+id/vg_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/tv_loading_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/loading"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/tv_loading_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/zero_byte_second"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/vg_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/text_color_2"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_error_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:background="@color/white_alpha12"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>

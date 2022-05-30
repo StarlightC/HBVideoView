@@ -16,3 +16,5 @@ rootProject.name = "HBVideoView"
 include(":sample")
 include(":hbvideoview")
 include(":ijkplayer")
+include(":core")
+include(":exoplayer")

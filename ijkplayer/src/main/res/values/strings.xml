@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting_video_background_play">setting_video_background_play</string>
+    <string name="setting_video_player">setting_video_player</string>
+    <string name="setting_video_using_media_codec">setting_video_using_media_codec</string>
+    <string name="setting_video_using_media_codec_auto_rotate">setting_video_using_media_codec_auto_rotate</string>
+    <string name="setting_video_media_codec_handle_resolution_change">setting_video_media_codec_handle_resolution_change</string>
+    <string name="setting_video_using_opensl_es">setting_video_using_opensl_es</string>
+    <string name="setting_video_pixel_format">setting_video_pixel_format</string>
+    <string name="setting_video_enable_no_view">setting_video_enable_no_view</string>
+    <string name="setting_video_enable_surface_view">setting_video_enable_surface_view</string>
+    <string name="setting_video_enable_texture_view">setting_video_enable_texture_view</string>
+    <string name="setting_video_enable_detached_surface_texture">setting_video_enable_detached_surface_texture</string>
+    <string name="setting_video_using_mediadatasource">setting_video_using_mediadatasource</string>
+</resources>

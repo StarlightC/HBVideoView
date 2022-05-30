@@ -10,6 +10,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/exoplayer" />
             <option value="$PROJECT_DIR$/hbvideoview" />
             <option value="$PROJECT_DIR$/ijkplayer" />
             <option value="$PROJECT_DIR$/sample" />

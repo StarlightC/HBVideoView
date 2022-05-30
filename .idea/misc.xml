@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="hbvideoview/src/main/res/drawable/background_controller.xml" value="0.193" />
+        <entry key="hbvideoview/src/main/res/drawable/background_header.xml" value="0.193" />
+        <entry key="hbvideoview/src/main/res/drawable/seekbar_thumb.xml" value="0.193" />
+        <entry key="hbvideoview/src/main/res/drawable/seekbar_track.xml" value="0.193" />
+        <entry key="hbvideoview/src/main/res/layout/layout_base_ui.xml" value="0.3117479794985288" />
+        <entry key="sample/src/main/res/layout/activity_main.xml" value="0.14479166666666668" />
+        <entry key="sample/src/main/res/xml/network_permission_config.xml" value="0.19947916666666668" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

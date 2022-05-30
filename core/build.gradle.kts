@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("maven-publish")
 }
 
 android {
@@ -47,4 +48,17 @@ dependencies {
 
     implementation("com.google.auto.service:auto-service:1.0")
     kapt("com.google.auto.service:auto-service:1.0")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "HBVideoView-Core"
+            url = uri("https://github.com/starlightc/hbvideoview")
+            credentials {
+                username = "starlightc"
+                password = property("GITHUB_TOKEN").toString()
+            }
+        }
+    }
 }

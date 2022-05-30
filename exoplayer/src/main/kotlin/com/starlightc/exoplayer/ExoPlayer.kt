@@ -6,13 +6,15 @@ import android.view.SurfaceHolder
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.MutableLiveData
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackParameters
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.analytics.AnalyticsListener
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.LoadEventInfo
 import com.google.android.exoplayer2.source.MediaLoadData
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.util.EventLogger
 import com.google.auto.service.AutoService
 import com.starlightc.core.Constant
 import com.starlightc.core.SimpleLogger
@@ -166,6 +168,14 @@ class ExoPlayer: IMediaPlayer<ExoPlayer>, AnalyticsListener {
         this.context = context
         instance = ExoPlayer.Builder(context).build()
         lifecycleRegistry = LifecycleRegistry(this)
+        playerStateLD.value = PlayerState.IDLE
+        targetState = PlayerState.IDLE
+        instance.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .build(), false)
+        instance.addAnalyticsListener(this)
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
 
@@ -188,13 +198,13 @@ class ExoPlayer: IMediaPlayer<ExoPlayer>, AnalyticsListener {
      */
     override fun start() {
         try {
-            playerStateLD.value = PlayerState.STARTED
-            SimpleLogger.instance.debugI("ExoPlayer start")
-            instance.playWhenReady = true
+            SimpleLogger.instance.debugI("IjkPlayer start")
+            instance.play()
             if (playerState == PlayerState.PREPARED && startPosition in 0L until duration) {
                 seekTo(startPosition)
                 startPosition = 0L
             }
+            playerStateLD.value = PlayerState.STARTED
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
@@ -495,7 +505,7 @@ class ExoPlayer: IMediaPlayer<ExoPlayer>, AnalyticsListener {
         output: Any,
         renderTimeMs: Long
     ) {
-        super.onRenderedFirstFrame(eventTime, output, renderTimeMs)
+        videoInfoLD.value = PlayInfo(Constant.EXOPLAYER_INFO_CODE_RENDERING_STARTED, Constant.EXOPLAYER_INFO_CODE_RENDERING_STARTED)
     }
 
     /**

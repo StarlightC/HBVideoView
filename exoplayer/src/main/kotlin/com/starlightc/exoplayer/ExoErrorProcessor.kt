@@ -19,28 +19,18 @@ class ExoErrorProcessor: ErrorProcessor {
 
     override fun process(what: Int, extra: Int): Int {
         return when (what) {
-            Constant.EXOPLAYER_INFO_CODE_RENDERING_STARTED -> {
-                // 开始视频渲染
-                SimpleLogger.instance.debugI( "开始视频渲染 ExoPlayer")
+            Constant.EXOPLAYER_ERROR_CODE_LOADING -> {
+                SimpleLogger.instance.debugE("视频错误: LOADING_ERROR")
                 1
             }
-            Constant.EXOPLAYER_INFO_CODE_LOADING_START -> {
-                SimpleLogger.instance.debugI("开始loading ExoPlayer")
-                2
+            Constant.EXOPLAYER_ERROR_CODE_IO -> {
+                SimpleLogger.instance.debugE("视频错误: IO_ERROR")
+                1
             }
-            Constant.EXOPLAYER_INFO_CODE_LOADING_COMPLETED -> {
-                SimpleLogger.instance.debugI("loading结束 ExoPlayer")
-                3
+            else -> {
+                SimpleLogger.instance.debugE("视频错误: $what")
+                1
             }
-            Constant.EXOPLAYER_INFO_CODE_LOADING_CANCELED -> {
-                SimpleLogger.instance.debugI("loading取消 ExoPlayer")
-                3
-            }
-            Constant.EXOPLAYER_INFO_CODE_IS_PLAYING -> {
-                SimpleLogger.instance.debugI("状态：正在播放")
-                3
-            }
-            else -> 0
         }
     }
 }

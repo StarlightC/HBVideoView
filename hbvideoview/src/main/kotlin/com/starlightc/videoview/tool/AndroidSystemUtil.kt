@@ -6,7 +6,7 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
-import com.starlightc.core.Constant
+import com.starlightc.video.core.Constant
 
 /**
  * @author StarlightC

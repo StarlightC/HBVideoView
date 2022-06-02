@@ -24,9 +24,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.starlightc.core.Constant
-import com.starlightc.core.SimpleLogger
-import com.starlightc.core.infomation.PlayerState
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
+import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.videoview.R
 import com.starlightc.videoview.config.ErrorCode
 import com.starlightc.videoview.config.InfoCode

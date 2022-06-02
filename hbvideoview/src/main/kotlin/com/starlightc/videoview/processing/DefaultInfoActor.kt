@@ -1,8 +1,8 @@
 package com.starlightc.videoview.processing
 
 import androidx.lifecycle.MutableLiveData
-import com.starlightc.core.SimpleLogger
-import com.starlightc.core.infomation.PlayerState
+import com.starlightc.video.core.SimpleLogger
+import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.videoview.config.ErrorCode
 import com.starlightc.videoview.interfaces.InfoActor
 import com.starlightc.videoview.widget.AbsVideoView

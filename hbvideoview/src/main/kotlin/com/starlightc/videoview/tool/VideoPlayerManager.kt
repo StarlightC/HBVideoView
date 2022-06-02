@@ -16,15 +16,16 @@ import android.view.Window
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
-import com.starlightc.core.Constant
-import com.starlightc.core.SimpleLogger
-import com.starlightc.core.infomation.PlayerState
-import com.starlightc.core.interfaces.ErrorProcessor
-import com.starlightc.core.interfaces.IMediaPlayer
-import com.starlightc.core.interfaces.InfoProcessor
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
+import com.starlightc.video.core.infomation.PlayerState
+import com.starlightc.video.core.interfaces.ErrorProcessor
+import com.starlightc.video.core.interfaces.IMediaPlayer
+import com.starlightc.video.core.interfaces.InfoProcessor
 import com.starlightc.videoview.R
 import com.starlightc.videoview.config.WindowMode
 import com.starlightc.videoview.information.NetworkInfo
+import com.starlightc.videoview.player.AndroidMediaPlayer
 import com.starlightc.videoview.widget.AbsVideoView
 import com.starlightc.videoview.widget.TinyVideoView
 import java.lang.ref.WeakReference
@@ -61,30 +62,37 @@ class VideoPlayerManager {
 
     var networkStateLD: MutableLiveData<NetworkInfo> = MutableLiveData(NetworkInfo.WIFI)
 
-    fun initManager(context: Context, loader: ClassLoader?) {
-        loadAllPlayers(context, loader)
-        loadInfoProcessor(context, loader)
-        loadErrorProcessor(context, loader)
+    fun initManager(context: Context, players: MutableList<IMediaPlayer<*>>) {
+        loadAllPlayers(context, players)
+        loadInfoProcessor(players)
+        loadErrorProcessor(players)
     }
 
-    private fun loadInfoProcessor(context: Context, loader: ClassLoader?) {
-        val processorSet = ServiceLoader.load(InfoProcessor::class.java,loader).toList()
-        processorSet.forEach{
-            infoProcessorList[it.getName()] = it
-            SimpleLogger.instance.debugI("InfoProcessor load: ${it.getName()}")
+    fun initManager(context: Context, vararg players : IMediaPlayer<*>) {
+        val playerSet = ArrayList<IMediaPlayer<*>>()
+        playerSet.addAll(players)
+        initManager(context, playerSet)
+    }
+
+    private fun loadInfoProcessor(playerSet: List<IMediaPlayer<*>>) {
+        playerSet.forEach{
+            val processor = it.getInfoProcessor()
+            infoProcessorList[processor.getName()] = processor
+            SimpleLogger.instance.debugI("InfoProcessor load: ${processor.getName()}")
         }
     }
 
-    private fun loadErrorProcessor(context: Context, loader: ClassLoader?) {
-        val processorSet = ServiceLoader.load(ErrorProcessor::class.java,loader).toList()
-        processorSet.forEach{
-            errorProcessorList[it.getName()] = it
-            SimpleLogger.instance.debugI("ErrorProcessor load: ${it.getName()}")
+    private fun loadErrorProcessor(playerSet: List<IMediaPlayer<*>>) {
+        playerSet.forEach{
+            val processor = it.getErrorProcessor()
+            errorProcessorList[processor.getName()] = processor
+            SimpleLogger.instance.debugI("ErrorProcessor load: ${processor.getName()}")
         }
     }
 
-    private fun loadAllPlayers(context: Context, loader: ClassLoader?) {
-        val playerSet = ServiceLoader.load(IMediaPlayer::class.java,loader).toList()
+    private fun loadAllPlayers(context: Context, playerSet: MutableList<IMediaPlayer<*>>) {
+        val defaultPlayer = AndroidMediaPlayer()
+        playerSet.add(defaultPlayer)
         playerSet.forEach{
             it.create(context)
             playerList[it.getPlayerName()] = it

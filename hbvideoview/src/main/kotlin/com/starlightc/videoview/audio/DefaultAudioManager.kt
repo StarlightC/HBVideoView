@@ -9,8 +9,9 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.starlightc.videoview.interfaces.IAudioManager
-import com.starlightc.core.interfaces.IMediaPlayer
-import com.starlightc.core.Constant
+import com.starlightc.video.core.interfaces.IMediaPlayer
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
 import java.lang.ref.WeakReference
 
 /**
@@ -55,7 +56,7 @@ open class DefaultAudioManager(context: Context, mediaPlayer: IMediaPlayer<*>?, 
     }
 
     override fun abandonAudioFocus() {
-        Log.d(Constant.TAG,"放弃音频焦点----------------")
+        SimpleLogger.instance.debugD(Constant.TAG,"放弃音频焦点----------------")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             audioFocusRequest?.let {
                 audioManager.abandonAudioFocusRequest(it)

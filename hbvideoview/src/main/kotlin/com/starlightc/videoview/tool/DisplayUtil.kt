@@ -13,7 +13,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.starlightc.core.Constant
+import com.starlightc.video.core.Constant
 
 /**
  * @author StarlightC

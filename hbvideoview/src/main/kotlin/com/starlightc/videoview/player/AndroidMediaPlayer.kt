@@ -9,15 +9,18 @@ import android.view.SurfaceHolder
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.MutableLiveData
-import com.google.auto.service.AutoService
-import com.starlightc.core.infomation.PlayInfo
-import com.starlightc.core.infomation.PlayerState
-import com.starlightc.core.infomation.VideoDataSource
-import com.starlightc.core.infomation.VideoSize
-import com.starlightc.core.interfaces.IMediaPlayer
-import com.starlightc.core.interfaces.Settings
-import com.starlightc.core.Constant
-import com.starlightc.core.SimpleLogger
+import com.starlightc.video.core.infomation.PlayInfo
+import com.starlightc.video.core.infomation.PlayerState
+import com.starlightc.video.core.infomation.VideoDataSource
+import com.starlightc.video.core.infomation.VideoSize
+import com.starlightc.video.core.interfaces.IMediaPlayer
+import com.starlightc.video.core.interfaces.Settings
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
+import com.starlightc.video.core.interfaces.ErrorProcessor
+import com.starlightc.video.core.interfaces.InfoProcessor
+import com.starlightc.videoview.processing.AndroidErrorProcessor
+import com.starlightc.videoview.processing.AndroidInfoProcessor
 import java.lang.Exception
 
 /**
@@ -26,7 +29,6 @@ import java.lang.Exception
  *
  * Android MediaPlayer的封装
  */
-@AutoService(IMediaPlayer::class)
 class AndroidMediaPlayer: IMediaPlayer<MediaPlayer>,
     MediaPlayer.OnPreparedListener,
     MediaPlayer.OnCompletionListener,
@@ -111,6 +113,14 @@ class AndroidMediaPlayer: IMediaPlayer<MediaPlayer>,
         this.context = context
         lifecycleRegistry = LifecycleRegistry(this)
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
+    }
+
+    override fun getErrorProcessor(): ErrorProcessor {
+        return AndroidErrorProcessor()
+    }
+
+    override fun getInfoProcessor(): InfoProcessor {
+        return AndroidInfoProcessor()
     }
 
     override fun getPlayerName(): String {

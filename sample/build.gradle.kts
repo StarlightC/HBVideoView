@@ -1,6 +1,7 @@
 plugins {
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -40,7 +41,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
+    implementation("com.starlightc.ijkplayer:hbvideoview_ijkplayer:0.1.0")
+    implementation("com.starlightc.exoplayer:hbvideoview_exoplayer:0.1.0")
+
     implementation(project(":hbvideoview"))
-    implementation(project(":ijkplayer"))
-    implementation(project(":exoplayer"))
 }

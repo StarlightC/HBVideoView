@@ -1,9 +1,8 @@
 package com.starlightc.videoview.processing
 
-import com.google.auto.service.AutoService
-import com.starlightc.core.Constant
-import com.starlightc.core.SimpleLogger
-import com.starlightc.core.interfaces.InfoProcessor
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
+import com.starlightc.video.core.interfaces.InfoProcessor
 
 /**
  * @author StarlightC
@@ -11,7 +10,6 @@ import com.starlightc.core.interfaces.InfoProcessor
  *
  * TODO: description
  */
-@AutoService(InfoProcessor::class)
 class AndroidInfoProcessor: InfoProcessor {
     override fun getName(): String {
         return Constant.ANDROID_INFO_PROCESSOR

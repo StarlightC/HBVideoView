@@ -1,6 +1,6 @@
 package com.starlightc.videoview.interfaces
 
-import com.starlightc.core.infomation.PlayerState
+import com.starlightc.video.core.infomation.PlayerState
 
 /**
  * @author StarlightC

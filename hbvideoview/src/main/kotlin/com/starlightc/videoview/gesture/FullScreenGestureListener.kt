@@ -4,9 +4,9 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import com.starlightc.core.infomation.PlayerState
+import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.videoview.tool.AndroidSystemUtil
-import com.starlightc.core.Constant
+import com.starlightc.video.core.Constant
 import com.starlightc.videoview.widget.AbsVideoView
 import kotlin.math.abs
 

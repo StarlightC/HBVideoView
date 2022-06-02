@@ -14,10 +14,10 @@ import com.starlightc.videoview.config.ErrorCode
 import com.starlightc.videoview.config.InfoCode
 import com.starlightc.videoview.gesture.FullScreenGestureListener
 import com.starlightc.videoview.information.NetworkInfo
-import com.starlightc.core.infomation.PlayInfo
-import com.starlightc.core.infomation.PlayerState
-import com.starlightc.core.Constant
-import com.starlightc.core.SimpleLogger
+import com.starlightc.video.core.infomation.PlayInfo
+import com.starlightc.video.core.infomation.PlayerState
+import com.starlightc.video.core.Constant
+import com.starlightc.video.core.SimpleLogger
 import com.starlightc.videoview.interfaces.PlayerStateListener
 import com.starlightc.videoview.widget.AbsVideoView
 import com.starlightc.videoview.widget.BaseUI

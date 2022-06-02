@@ -3,9 +3,9 @@ package com.starlightc.videoview.audio
 import android.app.Service
 import android.content.Context
 import android.media.AudioManager
-import com.starlightc.core.infomation.PlayerState
+import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.videoview.interfaces.IAudioManager
-import com.starlightc.core.interfaces.IMediaPlayer
+import com.starlightc.video.core.interfaces.IMediaPlayer
 import java.lang.ref.WeakReference
 
 /**

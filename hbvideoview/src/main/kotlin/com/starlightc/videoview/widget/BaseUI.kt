@@ -96,7 +96,6 @@ class BaseUI(context: Context): FrameLayout(context), VideoUI {
     val alphaAnimatorLeft = AlphaAnimation(0.4f, 1.0f)
     val alphaAnimatorRight = AlphaAnimation(1.0f, 0.4f)
 
-    override var isLock = false
     override var isMute = false
 
     override var uiStateCode: Int = 0

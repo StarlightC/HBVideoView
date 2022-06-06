@@ -58,6 +58,12 @@ class HBVideoView : AbsVideoView {
             gestureListener?.isProgressGestureEnable = value
         }
 
+    var isDoubleTapGestureEnable: Boolean = true //是否开启双击播放/暂停手势
+        set(value) {
+            field = value
+            gestureListener?.isEnableDoubleTap = value
+        }
+
     override fun setup() {
         super.setup()
         SimpleLogger.instance.debugI("Setup")

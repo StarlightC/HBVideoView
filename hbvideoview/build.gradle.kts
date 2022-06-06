@@ -37,15 +37,15 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    api("com.github.StarlightC:HBVideoView_Core:0.1.1")
+    api("com.github.StarlightC:HBVideoView_Core:0.1.4")
 }
 
 afterEvaluate {
@@ -55,7 +55,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.starlightc.videoview"
                 artifactId = "hbvideoview"
-                version = "0.1.1"
+                version = "0.1.4"
             }
         }
     }

@@ -13,8 +13,6 @@ import com.starlightc.videoview.widget.AbsVideoView
  * 播放器UI
  */
 interface VideoUI {
-    var isLock: Boolean
-
     var isMute: Boolean
 
     var uiStateCode: Int

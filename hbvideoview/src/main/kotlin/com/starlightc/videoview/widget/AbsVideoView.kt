@@ -679,10 +679,18 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
      * 释放资源
      */
     override fun release() {
+        release(true)
+    }
+
+    fun release(remain: Boolean) {
         SimpleLogger.instance.debugI(Constant.TAG, "release() called")
-        mediaPlayer?.release()
-        mediaPlayer?.targetState?.let {
-            userStateListener?.onTargetState(it)
+        if (remain) {
+            mediaPlayer?.reset()
+        } else {
+            mediaPlayer?.release()
+            mediaPlayer?.targetState?.let {
+                userStateListener?.onTargetState(it)
+            }
         }
         surfaceTexture?.release()
         surfaceTexture = null

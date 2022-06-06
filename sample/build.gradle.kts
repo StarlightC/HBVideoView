@@ -41,8 +41,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
-    implementation("com.starlightc.ijkplayer:hbvideoview_ijkplayer:0.1.0")
-    implementation("com.starlightc.exoplayer:hbvideoview_exoplayer:0.1.0")
+    implementation("com.github.StarlightC:HBVideoView_IjkPlayer:v0.1.2")
+    implementation("com.github.StarlightC:HBVideoView_ExoPlayer:v0.1.1")
 
     implementation(project(":hbvideoview"))
 }

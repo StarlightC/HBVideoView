@@ -13,7 +13,7 @@ import com.starlightc.videoview.tool.VideoPlayerManager
 class SampleApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        VideoPlayerManager.instance.initManager(applicationContext, ExoPlayer())
+        VideoPlayerManager.instance.initManager(applicationContext, { ExoPlayer() })
         SimpleLogger.instance.isDebug = BuildConfig.DEBUG
     }
 

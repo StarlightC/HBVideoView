@@ -29,7 +29,6 @@ import com.starlightc.videoview.player.AndroidMediaPlayer
 import com.starlightc.videoview.widget.AbsVideoView
 import com.starlightc.videoview.widget.TinyVideoView
 import java.lang.ref.WeakReference
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 
@@ -51,7 +50,9 @@ class VideoPlayerManager {
 
     var surface: Surface? = null
 
-    private val playerList: ConcurrentHashMap<String, IMediaPlayer<*>?> = ConcurrentHashMap()
+    private val playerProviderList: ArrayList<() -> IMediaPlayer<*>> = ArrayList()
+    private val playerProviderMap: ConcurrentHashMap<String, () -> IMediaPlayer<*>> = ConcurrentHashMap()
+    private val playerList: ConcurrentHashMap<String, MutableList<IMediaPlayer<*>>> = ConcurrentHashMap()
     private val infoProcessorList: ConcurrentHashMap<String, InfoProcessor> = ConcurrentHashMap()
     private val errorProcessorList: ConcurrentHashMap<String, ErrorProcessor> = ConcurrentHashMap()
 
@@ -62,56 +63,122 @@ class VideoPlayerManager {
 
     var networkStateLD: MutableLiveData<NetworkInfo> = MutableLiveData(NetworkInfo.WIFI)
 
-    fun initManager(context: Context, players: MutableList<IMediaPlayer<*>>) {
-        loadAllPlayers(context, players)
-        loadInfoProcessor(players)
-        loadErrorProcessor(players)
+    fun initManager(context: Context) {
+        loadAllPlayers(context)
+        loadInfoProcessor()
+        loadErrorProcessor()
     }
 
-    fun initManager(context: Context, vararg players : IMediaPlayer<*>) {
-        val playerSet = ArrayList<IMediaPlayer<*>>()
-        playerSet.addAll(players)
-        initManager(context, playerSet)
+    fun initManager(context: Context, vararg playerProvider : () -> IMediaPlayer<*>) {
+        playerProviderList.clear()
+        playerProviderList.addAll(playerProvider)
+        initManager(context)
     }
 
-    private fun loadInfoProcessor(playerSet: List<IMediaPlayer<*>>) {
-        playerSet.forEach{
-            val processor = it.getInfoProcessor()
+    private fun loadInfoProcessor() {
+        playerList.values.forEach{
+            if (it.size <= 0) {
+                SimpleLogger.instance.debugE("loadInfoProcessor: Invalid Player Instance")
+                return
+            }
+            val processor = it[0].getInfoProcessor()
             infoProcessorList[processor.getName()] = processor
             SimpleLogger.instance.debugI("InfoProcessor load: ${processor.getName()}")
         }
     }
 
-    private fun loadErrorProcessor(playerSet: List<IMediaPlayer<*>>) {
-        playerSet.forEach{
-            val processor = it.getErrorProcessor()
+    private fun loadErrorProcessor() {
+        playerList.values.forEach{
+            if (it.size <= 0) {
+                SimpleLogger.instance.debugE("loadErrorProcessor: Invalid Player Instance")
+                return
+            }
+            val processor = it[0].getErrorProcessor()
             errorProcessorList[processor.getName()] = processor
             SimpleLogger.instance.debugI("ErrorProcessor load: ${processor.getName()}")
         }
     }
 
-    private fun loadAllPlayers(context: Context, playerSet: MutableList<IMediaPlayer<*>>) {
-        val defaultPlayer = AndroidMediaPlayer()
-        playerSet.add(defaultPlayer)
-        playerSet.forEach{
-            it.create(context)
-            playerList[it.getPlayerName()] = it
-            SimpleLogger.instance.debugI("Player load: ${it.getPlayerName()}")
+    private fun loadAllPlayers(context: Context) {
+        playerProviderList.add { AndroidMediaPlayer() }
+        playerProviderList.forEach{
+            val player = it.invoke()
+            player.create(context)
+            var playerInstanceList = playerList[player.getPlayerName()]
+            if (playerInstanceList == null) {
+                playerInstanceList = ArrayList()
+                playerList[player.getPlayerName()] = playerInstanceList
+            }
+            playerInstanceList.add(player)
+            playerProviderMap[player.getPlayerName()] = it
+            SimpleLogger.instance.debugI("Player load: ${player.getPlayerName()}, Player Count: ${playerInstanceList.size}")
         }
     }
 
-    fun release() {
-        for (player in playerList.elements()) {
-            player?.release()
+    fun releaseAll() {
+        for (playerKV in playerList) {
+            val players = playerKV.value
+            if (players.size > 0) {
+                players.forEach {
+                    it.release()
+                }
+            }
+            players.clear()
+            playerProviderMap[playerKV.key]?.invoke()?.let { ins ->
+                players.add(ins)
+            }
         }
-        playerList.clear()
+    }
+
+    fun release(name: String = Constant.ANDROID_MEDIA_PLAYER) {
+        val players = playerList[name]?:return
+        if (players.size > 0) {
+            players.forEach {
+                it.release()
+            }
+        }
+        players.clear()
+        playerProviderMap[name]?.invoke()?.let { ins ->
+            players.add(ins)
+        }
     }
 
     /**
      * 获取播放器实例
      */
     fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER): IMediaPlayer<*>? {
-        return playerList[name]
+        return getMediaPlayer(name, false)
+    }
+
+    /**
+     * 获取播放器实例
+     */
+    fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER, multiInstance: Boolean = false): IMediaPlayer<*>? {
+        if (multiInstance) {
+            val instance = playerProviderMap[name]?.invoke()
+            return if (instance != null) {
+                playerList[name]?.add(instance)
+                instance
+            } else {
+                SimpleLogger.instance.debugE("getMediaPlayer: Invalid PlayerProvider $name")
+                null
+            }
+        } else {
+            var playerInstanceList = playerList[name]
+
+            if (playerProviderMap[name] != null) {
+                if (playerInstanceList == null) {
+                    playerInstanceList = ArrayList()
+                    playerList[name] = playerInstanceList
+                }
+                if (playerInstanceList.size == 0) {
+                    playerInstanceList.add(playerProviderMap[name]!!.invoke())
+                }
+                return playerInstanceList[0]
+            }
+            SimpleLogger.instance.debugE("getMediaPlayer: Invalid PlayerProvider $name")
+            return null
+        }
     }
 
     /**
@@ -146,7 +213,7 @@ class VideoPlayerManager {
      * 开启全屏
      */
     fun startFullscreen(activity: Activity, videoView: View, container: ViewGroup?, orientation: Int = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-        Log.d("HVideoPlayer", "开启全屏")
+        SimpleLogger.instance.debugI("开启全屏")
         videoView.setTag(R.id.system_ui_visibility, activity.window.decorView.systemUiVisibility)
         if(videoView is AbsVideoView) {
             videoView.origin = container

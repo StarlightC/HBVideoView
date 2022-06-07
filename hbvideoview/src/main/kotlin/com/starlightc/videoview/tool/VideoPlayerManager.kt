@@ -46,6 +46,7 @@ class VideoPlayerManager {
         }
     }
 
+    private lateinit var applicationContext: Context
     private var videoViewRef: WeakReference<AbsVideoView>? = null
 
     var surface: Surface? = null
@@ -64,6 +65,7 @@ class VideoPlayerManager {
     var networkStateLD: MutableLiveData<NetworkInfo> = MutableLiveData(NetworkInfo.WIFI)
 
     fun initManager(context: Context) {
+        applicationContext = context
         loadAllPlayers(context)
         loadInfoProcessor()
         loadErrorProcessor()
@@ -156,31 +158,33 @@ class VideoPlayerManager {
      *
      * @param sharedInstance    使用共享的播放器内核(index为0)
      */
-    fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER, sharedInstance: Boolean = false): IMediaPlayer<*>? {
+    fun getMediaPlayer(context: Context, name: String = Constant.ANDROID_MEDIA_PLAYER, sharedInstance: Boolean = false): IMediaPlayer<*>? {
         if (sharedInstance) {
-            val instance = playerProviderMap[name]?.invoke()
-            return if (instance != null) {
-                playerList[name]?.add(instance)
-                instance
-            } else {
-                SimpleLogger.instance.debugE("getMediaPlayer: Invalid PlayerProvider $name")
-                null
-            }
-        } else {
             var playerInstanceList = playerList[name]
-
             if (playerProviderMap[name] != null) {
                 if (playerInstanceList == null) {
                     playerInstanceList = ArrayList()
                     playerList[name] = playerInstanceList
                 }
                 if (playerInstanceList.size == 0) {
-                    playerInstanceList.add(playerProviderMap[name]!!.invoke())
+                    val ins = playerProviderMap[name]!!.invoke()
+                    ins.create(applicationContext)
+                    playerInstanceList.add(ins)
                 }
                 return playerInstanceList[0]
             }
             SimpleLogger.instance.debugE("getMediaPlayer: Invalid PlayerProvider $name")
             return null
+        } else {
+            val instance = playerProviderMap[name]?.invoke()
+            return if (instance != null) {
+                instance.create(context)
+                playerList[name]?.add(instance)
+                instance
+            } else {
+                SimpleLogger.instance.debugE("getMediaPlayer: Invalid PlayerProvider $name")
+                null
+            }
         }
     }
 

@@ -93,6 +93,24 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
      */
     override var audioManager: IAudioManager = DefaultAudioManager(context, mediaPlayer)
     override var videoUI: VideoUI? = null
+    set(value) {
+        value?:return
+        if (value is View) {
+            uiLayer.removeAllViews()
+            field?.release()
+            val layoutParams = LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER
+            )
+            field = value
+            value.videoView = this
+            uiLayer.addView(value, layoutParams)
+            uiLayer.visibility = VISIBLE
+            value.visibility = VISIBLE
+            uiLayer.requestLayout()
+        }
+    }
 
     override val volumeLD: MutableLiveData<Int> = MutableLiveData()
 
@@ -170,23 +188,9 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             //enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
             typedArray.recycle()
         }
-       when(playerType) {
-            Constant.IJKPLAYER -> {
-                mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(Constant.IJKPLAYER)
-                infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.IJK_INFO_PROCESSOR)
-                errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.IJK_ERROR_PROCESSOR)
-            }
-            Constant.EXOPLAYER -> {
-                mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(Constant.EXOPLAYER)
-                infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.EXO_INFO_PROCESSOR)
-                errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.EXO_ERROR_PROCESSOR)
-            }
-            else -> {
-                mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(Constant.ANDROID_MEDIA_PLAYER)
-                infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.ANDROID_INFO_PROCESSOR)
-                errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.ANDROID_ERROR_PROCESSOR)
-            }
-        }
+        mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(playerType?:Constant.ANDROID_MEDIA_PLAYER)
+        infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.IJK_INFO_PROCESSOR)
+        errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.IJK_ERROR_PROCESSOR)
         setup()
     }
 

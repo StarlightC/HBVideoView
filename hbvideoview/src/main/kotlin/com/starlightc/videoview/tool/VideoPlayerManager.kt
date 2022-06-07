@@ -149,8 +149,8 @@ class VideoPlayerManager {
     /**
      * 获取播放器实例
      */
-    fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER): IMediaPlayer<*>? {
-        return getMediaPlayer(name, false)
+    fun getMediaPlayer(context:Context, name: String = Constant.ANDROID_MEDIA_PLAYER): IMediaPlayer<*>? {
+        return getMediaPlayer(context, name, false)
     }
 
     /**

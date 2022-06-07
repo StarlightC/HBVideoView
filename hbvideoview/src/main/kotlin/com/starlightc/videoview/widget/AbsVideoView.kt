@@ -188,7 +188,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             //enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
             typedArray.recycle()
         }
-        mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(playerType?:Constant.ANDROID_MEDIA_PLAYER)
+        mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(context, playerType?:Constant.ANDROID_MEDIA_PLAYER)
         infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.IJK_INFO_PROCESSOR)
         errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.IJK_ERROR_PROCESSOR)
         setup()

@@ -130,16 +130,17 @@ class VideoPlayerManager {
         }
     }
 
-    fun release(name: String = Constant.ANDROID_MEDIA_PLAYER) {
-        val players = playerList[name]?:return
-        if (players.size > 0) {
-            players.forEach {
-                it.release()
+    fun release(player: IMediaPlayer<*>?) {
+        player?.let {
+            val name = player.getPlayerName()
+            val players = playerList[name]?:return
+            val index = players.indexOf(player)
+            if (index == 0) {
+                player.reset()
+            } else if (index > 0) {
+                player.release()
+                players.remove(player)
             }
-        }
-        players.clear()
-        playerProviderMap[name]?.invoke()?.let { ins ->
-            players.add(ins)
         }
     }
 
@@ -152,9 +153,11 @@ class VideoPlayerManager {
 
     /**
      * 获取播放器实例
+     *
+     * @param sharedInstance    使用共享的播放器内核(index为0)
      */
-    fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER, multiInstance: Boolean = false): IMediaPlayer<*>? {
-        if (multiInstance) {
+    fun getMediaPlayer(name: String = Constant.ANDROID_MEDIA_PLAYER, sharedInstance: Boolean = false): IMediaPlayer<*>? {
+        if (sharedInstance) {
             val instance = playerProviderMap[name]?.invoke()
             return if (instance != null) {
                 playerList[name]?.add(instance)

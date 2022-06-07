@@ -113,7 +113,6 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         set(value) {
             if (mediaPlayer?.getPlayerName() != Constant.EXOPLAYER) {
                 SimpleLogger.instance.debugW(text = "Warning: only exoplayer support bitrate switching")
-                return
             }
             if (value > 0) {
                 mediaPlayer?.selectBitrate(value)
@@ -152,6 +151,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     var userStateListener: UserStateListener? = null
     var playerStateListener: PlayerStateListener? = null
     var scaled = false
+    var sharedPlayer = false
     var isNetworkPrompted = false
         set(value) {
             field = value
@@ -166,6 +166,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             val typedArray =
                 context.obtainStyledAttributes(attrs, R.styleable.AbsVideoView, defStyleAttr, 0)
             playerType = typedArray.getString(R.styleable.AbsVideoView_player)
+            sharedPlayer = typedArray.getBoolean(R.styleable.AbsVideoView_sharedPlayer, false)
             //enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
             typedArray.recycle()
         }
@@ -679,19 +680,9 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
      * 释放资源
      */
     override fun release() {
-        release(true)
-    }
-
-    fun release(remain: Boolean) {
         SimpleLogger.instance.debugI(Constant.TAG, "release() called")
-        if (remain) {
-            mediaPlayer?.reset()
-        } else {
-            mediaPlayer?.release()
-            mediaPlayer?.targetState?.let {
-                userStateListener?.onTargetState(it)
-            }
-        }
+        VideoPlayerManager.instance.release(mediaPlayer)
+        userStateListener?.onTargetState(PlayerState.END)
         surfaceTexture?.release()
         surfaceTexture = null
         networkSpeedTimer?.cancel()

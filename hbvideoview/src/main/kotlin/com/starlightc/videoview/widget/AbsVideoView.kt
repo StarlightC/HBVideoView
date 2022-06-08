@@ -16,11 +16,8 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import com.starlightc.video.core.Constant
 import com.starlightc.video.core.SimpleLogger
 import com.starlightc.videoview.R
@@ -281,6 +278,8 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     override val targetState: PlayerState
         get() = mediaPlayer?.targetState?: PlayerState.IDLE
 
+    override val networkInfoLD: MutableLiveData<NetworkInfo> = MutableLiveData(NetworkInfo.WIFI)
+
     init {
         setTag(R.id.window_mode, WindowMode.NORMAL)
         this.setBackgroundColor(Color.BLACK)
@@ -507,7 +506,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.INITIALIZED, PlayerState.STOPPED -> {
                 AndroidSystemUtil.getActivityViaContext(context)?.let {
-                    VideoPlayerManager.instance.checkWIFIConnection(it)
+                    VideoPlayerManager.instance.checkNetworkConnection(it, networkInfoLD)
                 }
                 mediaPlayer?.prepareAsync()
             }
@@ -887,7 +886,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         }
         networkInfoObserver?.let {
             SimpleLogger.instance.debugI(Constant.TAG, "注册网络信息监听")
-            VideoPlayerManager.instance.networkStateLD.observe(lifecycleOwner, it)
+            networkInfoLD.observe(lifecycleOwner, it)
         }
     }
 
@@ -904,7 +903,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             mediaPlayer?.videoInfoLD?.removeObserver(it)
         }
         networkInfoObserver?.let {
-            VideoPlayerManager.instance.networkStateLD.removeObserver(it)
+            networkInfoLD.removeObserver(it)
         }
         audioManager.abandonAudioFocus()
     }
@@ -924,7 +923,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     private fun registerNetworkInfoObserver() {
         val activity = AndroidSystemUtil.getActivityViaContext(context)
         val lifecycleOwner = if (activity is LifecycleOwner) activity else return
-        VideoPlayerManager.instance.networkStateLD.observe(lifecycleOwner, networkInfoObserver ?: return)
+        networkInfoLD.observe(lifecycleOwner, networkInfoObserver ?: return)
     }
 
     /**

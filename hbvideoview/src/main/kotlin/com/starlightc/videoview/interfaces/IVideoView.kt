@@ -6,10 +6,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.video.core.interfaces.ErrorProcessor
 import com.starlightc.video.core.interfaces.IMediaPlayer
 import com.starlightc.video.core.interfaces.InfoProcessor
+import com.starlightc.videoview.information.NetworkInfo
 
 /**
  * @author StarlightC
@@ -110,6 +112,8 @@ interface IVideoView : TextureView.SurfaceTextureListener, LifecycleObserver {
     val targetState: PlayerState
 
     val infoActor: InfoActor
+
+    val networkInfoLD: LiveData<NetworkInfo>
 
     /**
      * 初始化播放

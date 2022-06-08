@@ -62,8 +62,6 @@ class VideoPlayerManager {
      */
     var isNetworkTypePrompted: Boolean = false
 
-    var networkStateLD: MutableLiveData<NetworkInfo> = MutableLiveData(NetworkInfo.WIFI)
-
     fun initManager(context: Context) {
         applicationContext = context
         loadAllPlayers(context)
@@ -310,7 +308,8 @@ class VideoPlayerManager {
     /**
      * 检查网络连接状态
      */
-    fun checkWIFIConnection(activity: Activity): Boolean {
+    fun checkNetworkConnection(activity: Activity, networkInfoLD: MutableLiveData<NetworkInfo>): Boolean {
+        SimpleLogger.instance.debugI("检查网络连接状态")
         var isConnected = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
             && (ContextCompat.checkSelfPermission(
@@ -322,7 +321,7 @@ class VideoPlayerManager {
                 Manifest.permission.READ_PHONE_STATE
             ) != PackageManager.PERMISSION_GRANTED)
         ) {
-            networkStateLD.value = NetworkInfo.WIFI
+            networkInfoLD.value = NetworkInfo.WIFI
             return isConnected
         }
         val cm = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -331,9 +330,9 @@ class VideoPlayerManager {
             activeNetworkInfo.type != ConnectivityManager.TYPE_WIFI ||
             !activeNetworkInfo.isConnected
         ) {
-            isConnected = false
             if (activeNetworkInfo == null) {
-                networkStateLD.value = NetworkInfo.NONE
+                isConnected = false
+                networkInfoLD.value = NetworkInfo.NONE
             } else {
                 //获取 TelephonyManager 对象
                 val telephonyManager = activity.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
@@ -346,7 +345,7 @@ class VideoPlayerManager {
                     TelephonyManager.NETWORK_TYPE_EDGE,
                     TelephonyManager.NETWORK_TYPE_1xRTT,
                     TelephonyManager.NETWORK_TYPE_IDEN -> {
-                        networkStateLD.value = NetworkInfo.GEN2
+                        networkInfoLD.value = NetworkInfo.GEN2
                     }
                     TelephonyManager.NETWORK_TYPE_EVDO_A,
                     TelephonyManager.NETWORK_TYPE_UMTS,
@@ -357,26 +356,26 @@ class VideoPlayerManager {
                     TelephonyManager.NETWORK_TYPE_EVDO_B,
                     TelephonyManager.NETWORK_TYPE_EHRPD,
                     TelephonyManager.NETWORK_TYPE_HSPAP -> {
-                        networkStateLD.value = NetworkInfo.GEN3
+                        networkInfoLD.value = NetworkInfo.GEN3
                     }
                     TelephonyManager.NETWORK_TYPE_LTE,
                     TelephonyManager.NETWORK_TYPE_IWLAN-> {
-                        networkStateLD.value = NetworkInfo.GEN4
+                        networkInfoLD.value = NetworkInfo.GEN4
                     }
                     TelephonyManager.NETWORK_TYPE_NR -> {
                         /**
                          * 该方法对5G的判断不一定准确，部分机型会返回UNKNOWN
                          */
-                        networkStateLD.value = NetworkInfo.GEN5
+                        networkInfoLD.value = NetworkInfo.GEN5
                     }
 
                     else -> {
-                        networkStateLD.value = NetworkInfo.MOBILE
+                        networkInfoLD.value = NetworkInfo.MOBILE
                     }
                 }
             }
         } else {
-            networkStateLD.value = NetworkInfo.WIFI
+            networkInfoLD.value = NetworkInfo.WIFI
         }
         return isConnected
     }

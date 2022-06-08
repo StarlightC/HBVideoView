@@ -93,24 +93,6 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
      */
     override var audioManager: IAudioManager = DefaultAudioManager(context, mediaPlayer)
     override var videoUI: VideoUI? = null
-    set(value) {
-        value?:return
-        if (value is View) {
-            uiLayer.removeAllViews()
-            field?.release()
-            val layoutParams = LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                Gravity.CENTER
-            )
-            field = value
-            value.videoView = this
-            uiLayer.addView(value, layoutParams)
-            uiLayer.visibility = VISIBLE
-            value.visibility = VISIBLE
-            uiLayer.requestLayout()
-        }
-    }
 
     override val volumeLD: MutableLiveData<Int> = MutableLiveData()
 
@@ -374,6 +356,25 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             }
         }
         videoUI?.switchScreenMode(mode)
+    }
+
+    fun replaceVideoUI(ui: VideoUI?) {
+        ui?:return
+        if (ui is View) {
+            uiLayer.removeAllViews()
+            videoUI?.release()
+            val layoutParams = LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER
+            )
+            videoUI = ui
+            ui.videoView = this
+            uiLayer.addView(ui, layoutParams)
+            uiLayer.visibility = VISIBLE
+            ui.visibility = VISIBLE
+            uiLayer.requestLayout()
+        }
     }
 
     fun getScreenMode(): WindowMode {

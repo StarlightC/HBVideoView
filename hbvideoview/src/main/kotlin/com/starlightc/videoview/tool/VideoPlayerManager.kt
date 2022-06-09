@@ -189,14 +189,14 @@ class VideoPlayerManager {
     /**
      * 获取信息处理类
      */
-    fun getInfoProcessor(name: String = Constant.ANDROID_INFO_PROCESSOR): InfoProcessor? {
+    fun getInfoProcessor(name: String = Constant.ANDROID_MEDIA_PLAYER): InfoProcessor? {
         return infoProcessorList[name]
     }
 
     /**
      * 获取错误处理类
      */
-    fun getErrorProcessor(name: String = Constant.ANDROID_ERROR_PROCESSOR): ErrorProcessor? {
+    fun getErrorProcessor(name: String = Constant.ANDROID_MEDIA_PLAYER): ErrorProcessor? {
         return errorProcessorList[name]
     }
 

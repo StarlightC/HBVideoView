@@ -10,7 +10,7 @@ import com.starlightc.video.core.interfaces.ErrorProcessor
  */
 class AndroidErrorProcessor: ErrorProcessor{
     override fun getName(): String {
-        return Constant.ANDROID_ERROR_PROCESSOR
+        return Constant.ANDROID_MEDIA_PLAYER
     }
 
     override fun process(what: Int, extra: Int): Int {

@@ -143,7 +143,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     var coverLayerAction: () -> Unit = { start() }
 
     var originalSpeed: Int = speed
-    var playerType = "default"
+    var playerType: String? = "default"
     var pageInfo: Any? = null
     var userStateListener: UserStateListener? = null
     var playerStateListener: PlayerStateListener? = null
@@ -158,7 +158,6 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     val networkSpeedLD: MutableLiveData<Long> = MutableLiveData()
 
     private fun preSetting(attrs: AttributeSet?, defStyleAttr: Int) {
-        var playerType: String? = null
         if (attrs != null) {
             val typedArray =
                 context.obtainStyledAttributes(attrs, R.styleable.AbsVideoView, defStyleAttr, 0)
@@ -168,8 +167,8 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             typedArray.recycle()
         }
         mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(context, playerType?:Constant.ANDROID_MEDIA_PLAYER)
-        infoProcessor = VideoPlayerManager.instance.getInfoProcessor(Constant.IJK_INFO_PROCESSOR)
-        errorProcessor = VideoPlayerManager.instance.getErrorProcessor(Constant.IJK_ERROR_PROCESSOR)
+        infoProcessor = VideoPlayerManager.instance.getInfoProcessor(playerType?:Constant.ANDROID_MEDIA_PLAYER)
+        errorProcessor = VideoPlayerManager.instance.getErrorProcessor(playerType?:Constant.ANDROID_MEDIA_PLAYER)
         setup()
     }
 

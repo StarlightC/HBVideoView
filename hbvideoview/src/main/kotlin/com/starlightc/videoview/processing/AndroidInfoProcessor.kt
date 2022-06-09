@@ -12,7 +12,7 @@ import com.starlightc.video.core.interfaces.InfoProcessor
  */
 class AndroidInfoProcessor: InfoProcessor {
     override fun getName(): String {
-        return Constant.ANDROID_INFO_PROCESSOR
+        return Constant.ANDROID_MEDIA_PLAYER
     }
 
     override fun process(what: Int, extra: Int): Int {

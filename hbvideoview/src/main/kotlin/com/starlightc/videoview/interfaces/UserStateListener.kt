@@ -10,7 +10,6 @@ import com.starlightc.video.core.infomation.PlayerState
  */
 interface UserStateListener {
     fun onRetry()
-    fun onClickCover()
     fun onTargetState(s: PlayerState)
     fun onCompleted()
 }

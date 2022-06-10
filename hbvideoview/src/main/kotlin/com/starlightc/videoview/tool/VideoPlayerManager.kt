@@ -2,10 +2,14 @@ package com.starlightc.videoview.tool
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.os.BatteryManager
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -50,6 +54,11 @@ class VideoPlayerManager {
     private var videoViewRef: WeakReference<AbsVideoView>? = null
 
     var surface: Surface? = null
+
+    val batteryChargeLD =  MutableLiveData<Boolean>(false)
+    val batteryPercentLD = MutableLiveData<Int>(100)
+
+    var batteryBroadCastReceiver: BroadcastReceiver? = null
 
     private val playerProviderList: ArrayList<() -> IMediaPlayer<*>> = ArrayList()
     private val playerProviderMap: ConcurrentHashMap<String, () -> IMediaPlayer<*>> = ConcurrentHashMap()
@@ -399,6 +408,66 @@ class VideoPlayerManager {
             videoView.raiseError(0, 0)
             SimpleLogger.instance.debugE(Constant.TAG, "Error CompletionCheck Failed:(" + 1 + "," + "0" + ")")
         }
+    }
+
+    private fun initBatteryInfo(context: Context) {
+        val batteryStatusFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        val batteryStatusIntent: Intent? = context.registerReceiver(null, batteryStatusFilter)
+        val status = batteryStatusIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+        batteryChargeLD.value = (status == BatteryManager.BATTERY_STATUS_CHARGING)
+        val bundle = batteryStatusIntent?.extras
+        // 获取当前电量
+        val current = bundle?.getInt("level") ?: 0
+        // 获取总电量
+        val total = bundle?.getInt("scale") ?: 1
+        batteryPercentLD.value = current * 100 / total
+        SimpleLogger.instance.debugI("当前电量：${batteryPercentLD.value }")
+    }
+
+    /**
+     * 电池状态监听
+     * 添加至onResume()
+     */
+    fun registerBatteryBroadCastReceiver(activityContext: Context){
+        if (batteryBroadCastReceiver == null) {
+            SimpleLogger.instance.debugI( "注册电池监听")
+            batteryBroadCastReceiver = object: BroadcastReceiver(){
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    val action = intent!!.action
+                    if (action == Intent.ACTION_POWER_CONNECTED) {
+                        batteryChargeLD.value = true
+                        SimpleLogger.instance.debugI( "电源已连接")
+                    } else if (action == Intent.ACTION_POWER_DISCONNECTED) {
+                        batteryChargeLD.value = false
+                        SimpleLogger.instance.debugI( "电源断开")
+                    } else if (action == Intent.ACTION_BATTERY_CHANGED) {
+                        val bundle = intent.extras
+                        // 获取当前电量
+                        val current = bundle?.getInt("level") ?: 0
+                        // 获取总电量
+                        val total = bundle?.getInt("scale") ?: 1
+                        batteryPercentLD.value = current * 100 / total
+                    }
+                }
+            }
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
+            intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
+            intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED)
+            activityContext.registerReceiver(batteryBroadCastReceiver, intentFilter)
+        }
+    }
+
+    /**
+     * 销毁接收器
+     * 添加至onPause()
+     */
+    fun unregisterBatteryBroadCastReceiver(activityContext: Context){
+        batteryBroadCastReceiver?.let {
+            SimpleLogger.instance.debugI( "销毁电源监听")
+            activityContext.unregisterReceiver(it)
+        }
+        batteryBroadCastReceiver = null
     }
 
     fun setCurrentVideoView(videoView: AbsVideoView){

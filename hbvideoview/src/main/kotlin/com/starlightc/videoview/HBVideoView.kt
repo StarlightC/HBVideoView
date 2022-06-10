@@ -122,7 +122,6 @@ class HBVideoView : AbsVideoView {
                         || (playerState == PlayerState.INITIALIZED && mediaPlayer?.targetState == PlayerState.STARTED)) {
                         videoUI?.resume()
                     }
-                    //update UI
                 }
                 NetworkInfo.MOBILE,
                 NetworkInfo.GEN5,
@@ -130,7 +129,6 @@ class HBVideoView : AbsVideoView {
                 NetworkInfo.GEN3,
                 NetworkInfo.GEN2 -> {
                     SimpleLogger.instance.debugI(Constant.TAG, "WIFI连接断开 NETWORK_INFO_WIFI_DISCONNECTED")
-                    //update UI
                     if (!isNetworkPrompted) {
                         if (isPlayable() && isPlaying) {
                             SimpleLogger.instance.debugI(Constant.TAG, "移除视频封面")

@@ -47,11 +47,6 @@ interface IVideoView : TextureView.SurfaceTextureListener, LifecycleObserver {
     val danmakuContainer: RelativeLayout
 
     /**
-     * 弹幕功能提供器
-     */
-    var danmakuProvider: DanmakuProvider<*>?
-
-    /**
      * 播放器内核
      */
     var mediaPlayer: IMediaPlayer<*>?

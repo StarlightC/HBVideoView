@@ -137,7 +137,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         set(value) {
             field = value
             mediaPlayer?.setSpeed(value.toFloat() / 100)
-            danmakuProvider?.speed = value
+            danmakuController?.speed = value
         }
 
     var coverLayerAction: () -> Unit = { start() }
@@ -149,6 +149,14 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     var playerStateListener: PlayerStateListener? = null
     var scaled = false
     var sharedPlayer = false
+    var danmakuInitialized = false
+    var enableDanmaku = false
+        set(value) {
+            if (field != value) {
+                field = value
+                danmakuInitialized = false
+            }
+        }
     var isNetworkPrompted = false
         set(value) {
             field = value
@@ -163,7 +171,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                 context.obtainStyledAttributes(attrs, R.styleable.AbsVideoView, defStyleAttr, 0)
             playerType = typedArray.getString(R.styleable.AbsVideoView_player)
             sharedPlayer = typedArray.getBoolean(R.styleable.AbsVideoView_sharedPlayer, false)
-            //enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
+            enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
             typedArray.recycle()
         }
         mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(context, playerType?:Constant.ANDROID_MEDIA_PLAYER)
@@ -211,9 +219,9 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     }
 
     /**
-     * 弹幕功能实现
+     * 弹幕控制器
      */
-    override var danmakuProvider: DanmakuProvider<*>? = null
+    var danmakuController: DanmakuController? = null
 
     /**
      * 弹幕层
@@ -324,10 +332,10 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     abstract fun initObserverAndListener()
 
     /**
-     * 初始化弹幕生成器
+     * 初始化弹幕层
      * hint: 拥有父类的情况下需保证父类中该函数体为空
      */
-    abstract fun initDanmaku()
+    abstract fun initDanmaku(danmakuView: View)
 
     /**
      * 初始化交互界面
@@ -977,6 +985,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         playerStateListener?.onEvent()
         when (it) {
             PlayerState.PREPARED -> {
+                danmakuController?.duration = duration
                 playerStateListener?.onPrepared()
                 if (mediaPlayer?.playOnReady == true) {
                     start()

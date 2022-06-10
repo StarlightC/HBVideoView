@@ -2,6 +2,7 @@ package com.starlightc.videoview.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 
 /**
  * @author StarlightC
@@ -29,7 +30,7 @@ class TinyVideoView: AbsVideoView {
         TODO("Not yet implemented")
     }
 
-    override fun initDanmaku() {
+    override fun initDanmaku(danmakuView: View) {
         TODO("Not yet implemented")
     }
 

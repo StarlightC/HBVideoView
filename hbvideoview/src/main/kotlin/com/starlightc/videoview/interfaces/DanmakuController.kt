@@ -6,10 +6,11 @@ package com.starlightc.videoview.interfaces
  *
  * 提供弹幕功能
  */
-interface DanmakuProvider<T> {
-
+interface DanmakuController {
     /**
      * 弹幕播放速度
      */
     var speed: Int
+
+    var duration: Long
 }

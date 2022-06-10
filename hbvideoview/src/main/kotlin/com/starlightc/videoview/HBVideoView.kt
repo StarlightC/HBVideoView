@@ -6,8 +6,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.starlightc.videoview.config.ErrorCode
@@ -18,7 +20,7 @@ import com.starlightc.video.core.infomation.PlayInfo
 import com.starlightc.video.core.infomation.PlayerState
 import com.starlightc.video.core.Constant
 import com.starlightc.video.core.SimpleLogger
-import com.starlightc.videoview.interfaces.PlayerStateListener
+import com.starlightc.videoview.tool.DisplayUtil
 import com.starlightc.videoview.widget.AbsVideoView
 import com.starlightc.videoview.widget.BaseUI
 
@@ -78,8 +80,21 @@ class HBVideoView : AbsVideoView {
         initVideoErrorObserver()
     }
 
-    override fun initDanmaku() {
-        //TODO "Not yet implemented"
+    override fun initDanmaku(danmakuView: View) {
+        if (!danmakuInitialized && danmakuController != null) {
+            val layoutParams = RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            layoutParams.topMargin = DisplayUtil.dp2px(context, 4f)
+            layoutParams.bottomMargin = DisplayUtil.dp2px(context, 4f)
+            danmakuContainer.addView(
+                danmakuView,
+                layoutParams
+            )
+            danmakuContainer.visibility = VISIBLE
+            danmakuInitialized = true
+        }
     }
 
     override fun initUI() {

@@ -1051,7 +1051,11 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     }
 
     fun addVideoDataSource(name: String?, uri: Uri, headers: Map<String?, String?>? = null, cookies: List<HttpCookie>? = null, isLive: Boolean = false) {
-        mediaPlayer?.addVideoDataSource(VideoDataSource(name, uri, headers, cookies, isLive))
+        addVideoDataSource(name, uri, -1,  headers, cookies, isLive)
+    }
+
+    fun addVideoDataSource(name: String?, uri: Uri, defaultType: Int, headers: Map<String?,  String?>? = null, cookies: List<HttpCookie>? = null, isLive: Boolean = false) {
+        mediaPlayer?.addVideoDataSource(VideoDataSource(name, uri, defaultType,  headers, cookies, isLive))
     }
 
     fun clearVideoDataSourceList() {

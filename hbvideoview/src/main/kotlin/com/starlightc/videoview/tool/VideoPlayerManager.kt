@@ -304,14 +304,14 @@ class VideoPlayerManager {
      * 开启小窗
      */
     fun startTinyWindow(activity: Activity, tinyVideoView: TinyVideoView) {
-        TODO()
+        // Todo
     }
 
     /**
      * 取消小窗
      */
     fun dismissTinyWindow(activity: Activity) {
-        TODO()
+        // Todo
     }
 
     /**

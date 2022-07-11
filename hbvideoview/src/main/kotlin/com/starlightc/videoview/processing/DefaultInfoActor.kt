@@ -22,14 +22,14 @@ class DefaultInfoActor:  InfoActor{
                 view.retryCount = 0
             }
             2 -> { //开始缓冲
-                view.videoUI?.showLoading()
-                //danmakuView?.pause()
+                if (view.playerState != PlayerState.CACHING) {
+                    view.videoUI?.showLoading()
+                    //danmakuView?.pause()
+                }
             }
             3 -> { //从缓冲结束
-                if (view.playerState != PlayerState.CACHING) {
-                    view.videoUI?.hideLoading()
-                    view.retryCount = 0
-                }
+                view.videoUI?.hideLoading()
+                view.retryCount = 0
             }
             4 -> { //视频方向更改
                 view.setVideoRotation(extra.toFloat())

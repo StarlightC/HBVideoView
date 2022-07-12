@@ -22,7 +22,7 @@ class DefaultInfoActor:  InfoActor{
                 view.retryCount = 0
             }
             2 -> { //开始缓冲
-                if (view.playerState != PlayerState.CACHING) {
+                if (view.playerState == PlayerState.CACHING) {
                     view.videoUI?.showLoading()
                     //danmakuView?.pause()
                 }

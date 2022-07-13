@@ -34,6 +34,8 @@ import com.starlightc.videoview.widget.BaseUI
 class HBVideoView : AbsVideoView {
     constructor(context: Context) : super(context)
 
+    constructor(context: Context, type: String, share: Boolean, danmaku: Boolean) : super(context, type, share, danmaku)
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(

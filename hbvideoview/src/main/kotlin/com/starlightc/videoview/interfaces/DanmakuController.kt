@@ -25,4 +25,12 @@ interface DanmakuController {
     fun hide()
 
     fun show()
+
+    fun start()
+
+    fun stop()
+
+    fun pause()
+
+    fun seekTo(position: Long)
 }

@@ -549,6 +549,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.start()
                 videoUI?.start()
+                danmakuController?.start()
                 keepScreenOn(true)
             }
             PlayerState.PREPARING, PlayerState.CACHING -> {
@@ -685,6 +686,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.pause()
+                danmakuController?.pause()
             }
             else -> {}
         }
@@ -702,6 +704,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.STOPPED, PlayerState.COMPLETED -> {
                 mediaPlayer?.stop()
+                danmakuController?.stop()
             }
             else -> {}
         }
@@ -743,7 +746,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.seekTo(time)
-
+                danmakuController?.seekTo(time)
             }
             PlayerState.PREPARING, PlayerState.CACHING -> {
                 if (preparing) {
@@ -1019,6 +1022,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             }
             PlayerState.PAUSED -> {
                 abandonAudioFocus()
+                danmakuController?.pause()
                 playerStateListener?.onPaused()
             }
             PlayerState.STARTED -> {
@@ -1029,22 +1033,27 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                     coverLayer.visibility = View.GONE
                 }, 50)
                 playerStateListener?.onStarted()
+                danmakuController?.start()
             }
             PlayerState.COMPLETED -> {
                 VideoPlayerManager.instance.completionCheck(it, this)
+                danmakuController?.stop()
                 abandonAudioFocus()
             }
             PlayerState.STOPPED -> {
                 abandonAudioFocus()
+                danmakuController?.stop()
                 playerStateListener?.onStopped()
             }
             PlayerState.END -> {
                 abandonAudioFocus()
+                danmakuController?.stop()
                 playerStateListener?.onEnd()
 
             }
             PlayerState.ERROR -> {
                 abandonAudioFocus()
+                danmakuController?.stop()
                 postDelayed({
                     SimpleLogger.instance.debugI(Constant.TAG, "移除视频封面")
                     coverLayer.visibility = View.GONE

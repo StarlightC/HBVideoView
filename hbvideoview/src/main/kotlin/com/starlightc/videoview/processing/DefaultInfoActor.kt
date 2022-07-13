@@ -18,18 +18,17 @@ class DefaultInfoActor:  InfoActor{
             1 -> { //开始视频or音频渲染
                 view.videoUI?.hideLoading()
                 view.videoUI?.hideError()
-                //videoUI?.hideShare()
                 view.retryCount = 0
+                view.danmakuController?.start()
             }
             2 -> { //开始缓冲
                 if (view.playerState == PlayerState.CACHING) {
                     view.videoUI?.showLoading()
-                    //danmakuView?.pause()
+                    view.danmakuController?.pause()
                 }
             }
             3 -> { //从缓冲结束
                 view.videoUI?.hideLoading()
-                view.retryCount = 0
             }
             4 -> { //视频方向更改
                 view.setVideoRotation(extra.toFloat())

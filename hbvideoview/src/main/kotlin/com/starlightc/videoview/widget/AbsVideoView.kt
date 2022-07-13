@@ -148,6 +148,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     var userStateListener: UserStateListener? = null
     var playerStateListener: PlayerStateListener? = null
     var scaled = false
+    var preparing = false
     var sharedPlayer = false
     var danmakuInitialized = false
     var enableDanmaku = false
@@ -536,10 +537,15 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                 videoUI?.start()
                 keepScreenOn(true)
             }
-            PlayerState.PREPARING -> {
-                mediaPlayer?.playOnReady = true
-                keepScreenOn(true)
-                SimpleLogger.instance.debugI(Constant.TAG, "Player preparing, video will play after prepared")
+            PlayerState.PREPARING, PlayerState.CACHING -> {
+                if (preparing) {
+                    mediaPlayer?.playOnReady = true
+                    keepScreenOn(true)
+                    SimpleLogger.instance.debugI(
+                        Constant.TAG,
+                        "Player preparing, video will play after prepared"
+                    )
+                }
             }
             else -> {}
         }
@@ -725,8 +731,10 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                 mediaPlayer?.seekTo(time)
 
             }
-            PlayerState.PREPARING -> {
-                mediaPlayer?.startPosition = time
+            PlayerState.PREPARING, PlayerState.CACHING -> {
+                if (preparing) {
+                    mediaPlayer?.startPosition = time
+                }
             }
             else -> {}
         }
@@ -984,8 +992,12 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         SimpleLogger.instance.debugI(Constant.TAG, "PlayerState: ${it.javaClass.canonicalName}")
         playerStateListener?.onEvent()
         when (it) {
+            PlayerState.PREPARING -> {
+                preparing = true
+            }
             PlayerState.PREPARED -> {
                 danmakuController?.duration = duration
+                preparing = false
                 playerStateListener?.onPrepared()
                 if (mediaPlayer?.playOnReady == true) {
                     start()

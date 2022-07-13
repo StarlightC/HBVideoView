@@ -49,6 +49,10 @@ import java.util.*
 abstract class AbsVideoView : FrameLayout, IVideoView {
     constructor(context: Context) : super(context)
 
+    constructor(context: Context, type: String, share: Boolean, danmaku: Boolean) : super(context){
+        initPlayer(type, share, danmaku)
+    }
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         preSetting(attrs, 0)
     }
@@ -143,7 +147,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     var coverLayerAction: () -> Unit = { start() }
 
     var originalSpeed: Int = speed
-    var playerType: String? = "default"
+    var playerType: String? = Constant.ANDROID_MEDIA_PLAYER
     var pageInfo: Any? = null
     var userStateListener: UserStateListener? = null
     var playerStateListener: PlayerStateListener? = null
@@ -167,14 +171,24 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
     val networkSpeedLD: MutableLiveData<Long> = MutableLiveData()
 
     private fun preSetting(attrs: AttributeSet?, defStyleAttr: Int) {
+        var danmaku = false
+        var share = false
+        var type: String? = Constant.ANDROID_MEDIA_PLAYER
         if (attrs != null) {
             val typedArray =
                 context.obtainStyledAttributes(attrs, R.styleable.AbsVideoView, defStyleAttr, 0)
-            playerType = typedArray.getString(R.styleable.AbsVideoView_player)
-            sharedPlayer = typedArray.getBoolean(R.styleable.AbsVideoView_sharedPlayer, false)
-            enableDanmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
+            type = typedArray.getString(R.styleable.AbsVideoView_player)
+            share = typedArray.getBoolean(R.styleable.AbsVideoView_sharedPlayer, false)
+            danmaku = typedArray.getBoolean(R.styleable.AbsVideoView_danmaku, false)
             typedArray.recycle()
         }
+        initPlayer(type, share, danmaku)
+    }
+
+    private fun initPlayer(type: String?, share: Boolean, danmaku: Boolean) {
+        playerType = type
+        sharedPlayer = share
+        enableDanmaku = danmaku
         mediaPlayer = VideoPlayerManager.instance.getMediaPlayer(context, playerType?:Constant.ANDROID_MEDIA_PLAYER)
         infoProcessor = VideoPlayerManager.instance.getInfoProcessor(playerType?:Constant.ANDROID_MEDIA_PLAYER)
         errorProcessor = VideoPlayerManager.instance.getErrorProcessor(playerType?:Constant.ANDROID_MEDIA_PLAYER)

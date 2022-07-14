@@ -550,6 +550,13 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                 mediaPlayer?.start()
                 videoUI?.start()
                 danmakuController?.start()
+                danmakuController?.pause()
+                if (playerState == PlayerState.PAUSED) {
+                    danmakuController?.resume()
+                } else {
+                    danmakuController?.start(currentPosition)
+                    danmakuController?.refreshPosition()
+                }
                 keepScreenOn(true)
             }
             PlayerState.PREPARING, PlayerState.CACHING -> {
@@ -667,6 +674,10 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.seekTo(1)
+                danmakuController?.seekTo(1)
+                if (playerState != PlayerState.STARTED) {
+                    danmakuController?.pause()
+                }
                 start()
                 videoUI?.showController(Constant.CONTROLLER_HIDE_TIME)
             }
@@ -686,7 +697,6 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.pause()
-                danmakuController?.pause()
             }
             else -> {}
         }
@@ -704,7 +714,6 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         when (playerState) {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.STOPPED, PlayerState.COMPLETED -> {
                 mediaPlayer?.stop()
-                danmakuController?.stop()
             }
             else -> {}
         }
@@ -748,10 +757,16 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             PlayerState.PREPARED, PlayerState.STARTED, PlayerState.PAUSED, PlayerState.COMPLETED -> {
                 mediaPlayer?.seekTo(time)
                 danmakuController?.seekTo(time)
+                if (playerState != PlayerState.STARTED) {
+                    danmakuController?.pause()
+                }
             }
             PlayerState.PREPARING, PlayerState.CACHING -> {
                 if (preparing) {
                     mediaPlayer?.startPosition = time
+                    danmakuController?.start(time)
+                    danmakuController?.pause()
+                    danmakuController?.refreshPosition()
                 }
             }
             else -> {}

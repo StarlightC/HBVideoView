@@ -28,7 +28,13 @@ interface DanmakuController {
 
     fun start()
 
+    fun start(position: Long)
+
     fun stop()
+
+    fun resume()
+
+    fun refreshPosition()
 
     fun pause()
 

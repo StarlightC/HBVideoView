@@ -1053,23 +1053,23 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
             }
             PlayerState.COMPLETED -> {
                 VideoPlayerManager.instance.completionCheck(it, this)
-                danmakuController?.stop()
+                danmakuController?.pause()
                 abandonAudioFocus()
             }
             PlayerState.STOPPED -> {
                 abandonAudioFocus()
-                danmakuController?.stop()
+                danmakuController?.pause()
                 playerStateListener?.onStopped()
             }
             PlayerState.END -> {
                 abandonAudioFocus()
-                danmakuController?.stop()
+                danmakuController?.pause()
                 playerStateListener?.onEnd()
 
             }
             PlayerState.ERROR -> {
                 abandonAudioFocus()
-                danmakuController?.stop()
+                danmakuController?.pause()
                 postDelayed({
                     SimpleLogger.instance.debugI(Constant.TAG, "移除视频封面")
                     coverLayer.visibility = View.GONE

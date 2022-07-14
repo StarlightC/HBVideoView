@@ -718,6 +718,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
         VideoPlayerManager.instance.release(mediaPlayer)
         userStateListener?.onTargetState(PlayerState.END)
         surfaceTexture?.release()
+        videoUI?.release()
         surfaceTexture = null
         networkSpeedTimer?.cancel()
     }

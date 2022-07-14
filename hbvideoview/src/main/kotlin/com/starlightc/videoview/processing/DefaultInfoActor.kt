@@ -19,7 +19,7 @@ class DefaultInfoActor:  InfoActor{
                 view.videoUI?.hideLoading()
                 view.videoUI?.hideError()
                 view.retryCount = 0
-                view.danmakuController?.start()
+                view.danmakuController?.start(view.currentPosition)
             }
             2 -> { //开始缓冲
                 if (view.playerState == PlayerState.CACHING) {

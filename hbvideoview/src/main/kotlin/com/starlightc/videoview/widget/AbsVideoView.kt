@@ -1049,7 +1049,7 @@ abstract class AbsVideoView : FrameLayout, IVideoView {
                     coverLayer.visibility = View.GONE
                 }, 50)
                 playerStateListener?.onStarted()
-                danmakuController?.start()
+                danmakuController?.start(currentPosition)
             }
             PlayerState.COMPLETED -> {
                 VideoPlayerManager.instance.completionCheck(it, this)
